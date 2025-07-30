@@ -4,11 +4,15 @@ from huggingface_hub import hf_hub_download
 from pydantic import BaseModel
 import torch
 import torch.nn as nn
+from model import DeBERTaLSTMClassifier
+
 
 app = FastAPI()
 
 model_path = hf_hub_download(repo_id="khoa-done/phishing-detector", filename="deberta_lstm_checkpoint.pt")
-model = torch.load(model_path, map_location="cpu")
+model = DeBERTaLSTMClassifier()
+model.load_state_dict(model_path['model_state_dict'])
+
 model.eval()
 
 class InputData(BaseModel):
